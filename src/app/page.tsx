@@ -65,6 +65,7 @@ export default async function HomePage({
             <>
               <Link href="/admin/empresas">Empresas</Link>
               <Link href="/admin/moderacao">Moderação</Link>
+              <Link href="/admin/validar-cupom">Validar cupom</Link>
               <Link href="/admin/metricas">Métricas</Link>
             </>
           )}

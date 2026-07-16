@@ -1,7 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import { criarOferta, encerrarOferta } from "./actions";
-import ValidarCupom from "./validar-cupom";
+import ValidarCupom from "@/components/validar-cupom";
 
 export default async function PainelEmpresaPage() {
   const supabase = await createClient();
