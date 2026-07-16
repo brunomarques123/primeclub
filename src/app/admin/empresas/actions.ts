@@ -83,3 +83,25 @@ export async function cadastrarEmpresa(
   revalidatePath("/admin/empresas");
   return {};
 }
+
+export async function criarOfertaAdmin(formData: FormData) {
+  const supabase = await createClient();
+  const { data: auth } = await supabase.auth.getUser();
+  if (!auth.user) throw new Error("Não autenticado.");
+
+  const empresaId = String(formData.get("empresaId"));
+  const descricao = String(formData.get("descricao"));
+  const percentual = Number(formData.get("percentual"));
+
+  const admin = createAdminClient();
+  await admin.from("ofertas").insert({
+    empresa_id: empresaId,
+    descricao,
+    percentual_desconto: percentual,
+    status: "aprovada",
+    moderada_em: new Date().toISOString(),
+    moderada_por: auth.user.id,
+  });
+
+  revalidatePath("/admin/empresas");
+}

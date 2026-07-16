@@ -21,8 +21,20 @@ export default function NovaEmpresaForm() {
       </div>
       <hr />
       <p className="text-sm text-neutral-500">Login do painel da empresa (opcional agora, pode ser criado depois)</p>
-      <input name="emailLogin" type="email" placeholder="E-mail de login" className="border rounded px-3 py-2" />
-      <input name="senhaLogin" type="password" placeholder="Senha provisória" className="border rounded px-3 py-2" />
+      <input
+        name="emailLogin"
+        type="email"
+        placeholder="E-mail de login"
+        autoComplete="off"
+        className="border rounded px-3 py-2"
+      />
+      <input
+        name="senhaLogin"
+        type="password"
+        placeholder="Senha provisória"
+        autoComplete="new-password"
+        className="border rounded px-3 py-2"
+      />
 
       {state.erro && <p className="text-red-600 text-sm">{state.erro}</p>}
 
