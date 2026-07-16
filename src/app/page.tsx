@@ -23,6 +23,16 @@ export default async function HomePage({
   const supabase = await createClient();
   const { data: auth } = await supabase.auth.getUser();
 
+  let papel: string | null = null;
+  if (auth.user) {
+    const { data: usuario } = await supabase
+      .from("usuarios")
+      .select("papel")
+      .eq("id", auth.user.id)
+      .single();
+    papel = usuario?.papel ?? null;
+  }
+
   const { data: ofertas } = await supabase
     .from("ofertas")
     .select("id, descricao, percentual_desconto, empresas(id, nome, categoria, endereco)")
@@ -47,6 +57,14 @@ export default async function HomePage({
           {auth.user ? (
             <>
               <Link href="/assinatura">Assinatura</Link>
+              {papel === "empresa" && <Link href="/empresa/painel">Painel da empresa</Link>}
+              {papel === "admin" && (
+                <>
+                  <Link href="/admin/empresas">Empresas</Link>
+                  <Link href="/admin/moderacao">Moderação</Link>
+                  <Link href="/admin/metricas">Métricas</Link>
+                </>
+              )}
               <form action={sair}>
                 <button type="submit">Sair</button>
               </form>
