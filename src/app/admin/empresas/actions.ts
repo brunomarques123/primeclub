@@ -4,10 +4,15 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
 
-export async function cadastrarEmpresa(formData: FormData) {
+export type CadastrarEmpresaState = { erro?: string };
+
+export async function cadastrarEmpresa(
+  _prev: CadastrarEmpresaState,
+  formData: FormData
+): Promise<CadastrarEmpresaState> {
   const supabase = await createClient();
   const { data: auth } = await supabase.auth.getUser();
-  if (!auth.user) throw new Error("Não autenticado.");
+  if (!auth.user) return { erro: "Não autenticado." };
 
   const nome = String(formData.get("nome"));
   const cnpj = String(formData.get("cnpj")).replace(/\D/g, "");
@@ -20,6 +25,15 @@ export async function cadastrarEmpresa(formData: FormData) {
 
   const admin = createAdminClient();
 
+  const { data: cnpjExistente } = await admin
+    .from("empresas")
+    .select("id")
+    .eq("cnpj", cnpj)
+    .maybeSingle();
+  if (cnpjExistente) {
+    return { erro: "Já existe uma empresa cadastrada com esse CNPJ." };
+  }
+
   let usuarioId: string | null = null;
 
   if (emailLogin && senhaLogin) {
@@ -29,20 +43,29 @@ export async function cadastrarEmpresa(formData: FormData) {
       email_confirm: true,
     });
     if (authError || !novoUsuario.user) {
-      throw new Error(authError?.message ?? "Erro ao criar login da empresa.");
+      return {
+        erro:
+          authError?.message === "A user with this email address has already been registered"
+            ? "Já existe um usuário com esse e-mail de login. Use outro e-mail ou deixe em branco para cadastrar sem login por enquanto."
+            : authError?.message ?? "Erro ao criar login da empresa.",
+      };
     }
     usuarioId = novoUsuario.user.id;
 
-    await admin.from("usuarios").insert({
+    const { error: insertUsuarioError } = await admin.from("usuarios").insert({
       id: usuarioId,
       nome,
       email: emailLogin,
       cpf: cnpj, // empresas não têm CPF; usa CNPJ como identificador único do registro de usuário
       papel: "empresa",
     });
+    if (insertUsuarioError) {
+      await admin.auth.admin.deleteUser(usuarioId);
+      return { erro: "Erro ao registrar login da empresa: " + insertUsuarioError.message };
+    }
   }
 
-  await admin.from("empresas").insert({
+  const { error: insertEmpresaError } = await admin.from("empresas").insert({
     usuario_id: usuarioId,
     nome,
     cnpj,
@@ -53,5 +76,10 @@ export async function cadastrarEmpresa(formData: FormData) {
     contrato_assinado: true,
   });
 
+  if (insertEmpresaError) {
+    return { erro: "Erro ao cadastrar empresa: " + insertEmpresaError.message };
+  }
+
   revalidatePath("/admin/empresas");
+  return {};
 }

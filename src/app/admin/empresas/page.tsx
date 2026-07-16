@@ -1,6 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
-import { cadastrarEmpresa } from "./actions";
+import NovaEmpresaForm from "./novo-empresa-form";
 
 export default async function AdminEmpresasPage() {
   const supabase = await createClient();
@@ -23,24 +23,7 @@ export default async function AdminEmpresasPage() {
     <main className="mx-auto max-w-2xl p-6 flex flex-col gap-8">
       <h1 className="text-2xl font-bold">Empresas parceiras</h1>
 
-      <form action={cadastrarEmpresa} className="border rounded-lg p-4 grid gap-3">
-        <h2 className="font-semibold">Cadastrar nova empresa</h2>
-        <input name="nome" placeholder="Nome do estabelecimento" required className="border rounded px-3 py-2" />
-        <input name="cnpj" placeholder="CNPJ" required className="border rounded px-3 py-2" />
-        <input name="categoria" placeholder="Categoria (ex: Alimentação, Beleza)" required className="border rounded px-3 py-2" />
-        <input name="endereco" placeholder="Endereço" className="border rounded px-3 py-2" />
-        <div className="grid grid-cols-2 gap-3">
-          <input name="latitude" type="number" step="any" placeholder="Latitude" className="border rounded px-3 py-2" />
-          <input name="longitude" type="number" step="any" placeholder="Longitude" className="border rounded px-3 py-2" />
-        </div>
-        <hr />
-        <p className="text-sm text-neutral-500">Login do painel da empresa (opcional agora, pode ser criado depois)</p>
-        <input name="emailLogin" type="email" placeholder="E-mail de login" className="border rounded px-3 py-2" />
-        <input name="senhaLogin" type="password" placeholder="Senha provisória" className="border rounded px-3 py-2" />
-        <button type="submit" className="bg-black text-white rounded px-3 py-2 w-fit">
-          Cadastrar
-        </button>
-      </form>
+      <NovaEmpresaForm />
 
       <div className="grid gap-3">
         {empresas?.map((empresa) => (
