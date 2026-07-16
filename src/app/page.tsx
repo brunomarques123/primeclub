@@ -1,4 +1,6 @@
 import Link from "next/link";
+import Image from "next/image";
+import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { sair } from "@/app/logout/actions";
 
@@ -23,15 +25,15 @@ export default async function HomePage({
   const supabase = await createClient();
   const { data: auth } = await supabase.auth.getUser();
 
+  if (!auth.user) redirect("/login");
+
   let papel: string | null = null;
-  if (auth.user) {
-    const { data: usuario } = await supabase
-      .from("usuarios")
-      .select("papel")
-      .eq("id", auth.user.id)
-      .single();
-    papel = usuario?.papel ?? null;
-  }
+  const { data: usuario } = await supabase
+    .from("usuarios")
+    .select("papel")
+    .eq("id", auth.user.id)
+    .single();
+  papel = usuario?.papel ?? null;
 
   const { data: ofertas } = await supabase
     .from("ofertas")
@@ -48,30 +50,27 @@ export default async function HomePage({
 
   return (
     <main className="mx-auto max-w-3xl p-6">
-      <header className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold">PrimeClub — Bauru</h1>
-        <nav className="flex gap-4 text-sm">
+      <header className="flex items-center justify-between mb-6 gap-4 flex-wrap">
+        <Link href="/" className="flex items-center gap-2">
+          <Image src="/logo.png" alt="PrimeClub" width={40} height={40} className="rounded" />
+          <span className="text-xl font-bold">PrimeClub — Bauru</span>
+        </Link>
+        <nav className="flex gap-4 text-sm items-center flex-wrap">
           <Link href="/perto-de-mim">Perto de mim</Link>
           <Link href="/favoritos">Favoritos</Link>
           <Link href="/historico">Histórico</Link>
-          {auth.user ? (
+          <Link href="/assinatura">Assinatura</Link>
+          {papel === "empresa" && <Link href="/empresa/painel">Painel da empresa</Link>}
+          {papel === "admin" && (
             <>
-              <Link href="/assinatura">Assinatura</Link>
-              {papel === "empresa" && <Link href="/empresa/painel">Painel da empresa</Link>}
-              {papel === "admin" && (
-                <>
-                  <Link href="/admin/empresas">Empresas</Link>
-                  <Link href="/admin/moderacao">Moderação</Link>
-                  <Link href="/admin/metricas">Métricas</Link>
-                </>
-              )}
-              <form action={sair}>
-                <button type="submit">Sair</button>
-              </form>
+              <Link href="/admin/empresas">Empresas</Link>
+              <Link href="/admin/moderacao">Moderação</Link>
+              <Link href="/admin/metricas">Métricas</Link>
             </>
-          ) : (
-            <Link href="/login">Entrar</Link>
           )}
+          <form action={sair}>
+            <button type="submit">Sair</button>
+          </form>
         </nav>
       </header>
 
