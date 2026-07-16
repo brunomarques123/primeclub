@@ -1,6 +1,8 @@
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
+import Image from "next/image";
 import { criarOferta, encerrarOferta } from "./actions";
+import { sair } from "@/app/logout/actions";
 import ValidarCupom from "@/components/validar-cupom";
 
 export default async function PainelEmpresaPage() {
@@ -30,10 +32,20 @@ export default async function PainelEmpresaPage() {
 
   return (
     <main className="mx-auto max-w-2xl p-6 flex flex-col gap-8">
-      <div>
-        <h1 className="text-2xl font-bold">{empresa.nome}</h1>
-        <p className="text-sm text-neutral-500">{empresa.categoria}</p>
-      </div>
+      <header className="flex items-center justify-between gap-4 flex-wrap">
+        <div className="flex items-center gap-2">
+          <Image src="/logo.png" alt="PrimeClub" width={36} height={36} className="rounded" />
+          <div>
+            <h1 className="text-xl font-bold">{empresa.nome}</h1>
+            <p className="text-sm text-neutral-500">{empresa.categoria}</p>
+          </div>
+        </div>
+        <form action={sair}>
+          <button type="submit" className="text-sm">
+            Sair
+          </button>
+        </form>
+      </header>
 
       <ValidarCupom />
 

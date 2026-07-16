@@ -1,18 +1,8 @@
 import { createClient } from "@/lib/supabase/server";
-import { redirect } from "next/navigation";
 import { moderarOferta } from "./actions";
 
 export default async function ModeracaoPage() {
   const supabase = await createClient();
-  const { data: auth } = await supabase.auth.getUser();
-  if (!auth.user) redirect("/login");
-
-  const { data: usuario } = await supabase
-    .from("usuarios")
-    .select("papel")
-    .eq("id", auth.user.id)
-    .single();
-  if (usuario?.papel !== "admin") redirect("/");
 
   const { data: pendentes } = await supabase
     .from("ofertas")
@@ -21,7 +11,7 @@ export default async function ModeracaoPage() {
     .order("criada_em", { ascending: true });
 
   return (
-    <main className="mx-auto max-w-2xl p-6">
+    <div>
       <h1 className="text-2xl font-bold mb-6">Moderação de ofertas</h1>
 
       <div className="grid gap-4">
@@ -49,6 +39,6 @@ export default async function ModeracaoPage() {
           </div>
         ))}
       </div>
-    </main>
+    </div>
   );
 }

@@ -1,19 +1,6 @@
 import { createAdminClient } from "@/lib/supabase/admin";
-import { createClient } from "@/lib/supabase/server";
-import { redirect } from "next/navigation";
 
 export default async function MetricasPage() {
-  const supabase = await createClient();
-  const { data: auth } = await supabase.auth.getUser();
-  if (!auth.user) redirect("/login");
-
-  const { data: usuario } = await supabase
-    .from("usuarios")
-    .select("papel")
-    .eq("id", auth.user.id)
-    .single();
-  if (usuario?.papel !== "admin") redirect("/");
-
   const admin = createAdminClient();
 
   const [{ count: totalUsuarios }, { count: assinantesAtivos }, { data: cupons }, { count: empresasAtivas }, { data: ofertas }] =
@@ -57,7 +44,7 @@ export default async function MetricasPage() {
   ];
 
   return (
-    <main className="mx-auto max-w-3xl p-6">
+    <div>
       <h1 className="text-2xl font-bold mb-6">Métricas</h1>
       <div className="grid grid-cols-2 gap-4">
         {cards.map((c) => (
@@ -67,6 +54,6 @@ export default async function MetricasPage() {
           </div>
         ))}
       </div>
-    </main>
+    </div>
   );
 }

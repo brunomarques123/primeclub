@@ -19,21 +19,25 @@ type OfertaComEmpresa = {
 export default async function HomePage({
   searchParams,
 }: {
-  searchParams: Promise<{ categoria?: string }>;
+  searchParams: Promise<{ categoria?: string; modo?: string }>;
 }) {
-  const { categoria } = await searchParams;
+  const { categoria, modo } = await searchParams;
   const supabase = await createClient();
   const { data: auth } = await supabase.auth.getUser();
 
   if (!auth.user) redirect("/login");
 
-  let papel: string | null = null;
   const { data: usuario } = await supabase
     .from("usuarios")
     .select("papel")
     .eq("id", auth.user.id)
     .single();
-  papel = usuario?.papel ?? null;
+  const papel = usuario?.papel ?? null;
+
+  if (modo !== "consumidor") {
+    if (papel === "admin") redirect("/admin");
+    if (papel === "empresa") redirect("/empresa/painel");
+  }
 
   const { data: ofertas } = await supabase
     .from("ofertas")
@@ -60,15 +64,7 @@ export default async function HomePage({
           <Link href="/favoritos">Favoritos</Link>
           <Link href="/historico">Histórico</Link>
           <Link href="/assinatura">Assinatura</Link>
-          {papel === "empresa" && <Link href="/empresa/painel">Painel da empresa</Link>}
-          {papel === "admin" && (
-            <>
-              <Link href="/admin/empresas">Empresas</Link>
-              <Link href="/admin/moderacao">Moderação</Link>
-              <Link href="/admin/validar-cupom">Validar cupom</Link>
-              <Link href="/admin/metricas">Métricas</Link>
-            </>
-          )}
+          {papel === "admin" && <Link href="/admin">Painel administrativo</Link>}
           <form action={sair}>
             <button type="submit">Sair</button>
           </form>
