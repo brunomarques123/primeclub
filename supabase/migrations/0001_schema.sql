@@ -81,8 +81,11 @@ alter table cupons enable row level security;
 alter table avaliacoes enable row level security;
 alter table favoritos enable row level security;
 
+-- security definer: evita recursao infinita, ja que usuarios tem uma
+-- policy de RLS que tambem chama esta funcao.
 create function auth_papel() returns papel_usuario
-language sql stable
+language sql stable security definer
+set search_path = public
 as $$
   select papel from usuarios where id = auth.uid();
 $$;
