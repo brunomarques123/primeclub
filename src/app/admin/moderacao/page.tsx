@@ -15,9 +15,9 @@ export default async function ModeracaoPage() {
       <h1 className="text-3xl font-extrabold tracking-tight mb-1">Moderação de ofertas</h1>
       <p className="text-neutral-400 mb-8">Revise antes de deixar uma oferta ir ao ar.</p>
 
-      <div className="grid gap-4">
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {pendentes?.length === 0 && (
-          <p className="text-neutral-500 border border-dashed border-neutral-800 rounded-2xl p-6 text-center">
+          <p className="text-neutral-500 border border-dashed border-neutral-800 rounded-2xl p-6 text-center sm:col-span-2 lg:col-span-3">
             Nenhuma oferta pendente. 🎉
           </p>
         )}

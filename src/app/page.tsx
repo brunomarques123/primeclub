@@ -55,7 +55,7 @@ export default async function HomePage({
 
   return (
     <div className="min-h-screen bg-neutral-950 text-neutral-100">
-      <div className="mx-auto max-w-3xl px-6 py-6 pb-28">
+      <div className="mx-auto max-w-6xl px-6 py-6 pb-28">
         <header className="flex items-center justify-between mb-8 gap-4">
           <Link href="/" className="flex items-center gap-3">
             <Image src="/logo.png" alt="PrimeClub" width={40} height={40} className="rounded-lg" />
@@ -114,9 +114,9 @@ export default async function HomePage({
           ))}
         </div>
 
-        <div className="grid gap-4">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {filtradas.length === 0 && (
-            <p className="text-neutral-500 border border-dashed border-neutral-800 rounded-2xl p-8 text-center">
+            <p className="text-neutral-500 border border-dashed border-neutral-800 rounded-2xl p-8 text-center sm:col-span-2 lg:col-span-3">
               Nenhuma oferta ativa no momento.
             </p>
           )}

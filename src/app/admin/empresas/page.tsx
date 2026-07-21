@@ -17,9 +17,10 @@ export default async function AdminEmpresasPage() {
         <p className="text-neutral-400">Cadastre novos parceiros e publique ofertas para eles.</p>
       </div>
 
-      <NovaEmpresaForm />
+      <div className="lg:grid lg:grid-cols-[380px_1fr] lg:items-start gap-6">
+        <NovaEmpresaForm />
 
-      <div className="grid gap-3">
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-2 mt-6 lg:mt-0">
         {empresas?.map((empresa) => (
           <div
             key={empresa.id}
@@ -65,6 +66,7 @@ export default async function AdminEmpresasPage() {
             </form>
           </div>
         ))}
+        </div>
       </div>
     </div>
   );

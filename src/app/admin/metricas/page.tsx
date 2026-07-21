@@ -47,7 +47,7 @@ export default async function MetricasPage() {
     <div>
       <h1 className="text-3xl font-extrabold tracking-tight mb-1">Métricas</h1>
       <p className="text-neutral-400 mb-8">Indicadores de tração do PrimeClub em tempo real.</p>
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {cards.map((c) => (
           <div
             key={c.label}

@@ -45,7 +45,7 @@ export default function AdminHomePage() {
       <h1 className="text-3xl font-extrabold tracking-tight mb-1">Painel administrativo</h1>
       <p className="text-neutral-400 mb-8">Gerencie empresas, ofertas e acompanhe os números do PrimeClub.</p>
 
-      <div className="grid gap-4 sm:grid-cols-2">
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {ATALHOS.map((a) => (
           <Link
             key={a.href}

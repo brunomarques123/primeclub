@@ -29,7 +29,7 @@ export default async function EmpresaPage({ params }: { params: Promise<{ id: st
 
   return (
     <div className="min-h-screen bg-neutral-950 text-neutral-100">
-      <div className="mx-auto max-w-2xl px-6 py-6 pb-28">
+      <div className="mx-auto max-w-3xl px-6 py-6 pb-28">
         <Link href="/" className="text-sm text-neutral-400 hover:text-amber-300 transition-colors">
           ← Voltar
         </Link>
@@ -45,7 +45,7 @@ export default async function EmpresaPage({ params }: { params: Promise<{ id: st
         </form>
 
         <h2 className="text-lg font-semibold mt-8 mb-3">Ofertas ativas</h2>
-        <div className="grid gap-4">
+        <div className="grid gap-4 sm:grid-cols-2">
           {ofertas?.length === 0 && (
             <p className="text-neutral-500 border border-dashed border-neutral-800 rounded-2xl p-6 text-center">
               Nenhuma oferta ativa no momento.
