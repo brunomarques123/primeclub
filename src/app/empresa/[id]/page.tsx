@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import GerarCupomButton from "./gerar-cupom-button";
 import { favoritar, avaliar } from "./actions";
+import ConsumidorDock from "@/components/consumidor-dock";
 
 export default async function EmpresaPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -28,7 +29,7 @@ export default async function EmpresaPage({ params }: { params: Promise<{ id: st
 
   return (
     <div className="min-h-screen bg-neutral-950 text-neutral-100">
-      <div className="mx-auto max-w-2xl px-6 py-6">
+      <div className="mx-auto max-w-2xl px-6 py-6 pb-28">
         <Link href="/" className="text-sm text-neutral-400 hover:text-amber-300 transition-colors">
           ← Voltar
         </Link>
@@ -96,6 +97,7 @@ export default async function EmpresaPage({ params }: { params: Promise<{ id: st
           </button>
         </form>
       </div>
+      <ConsumidorDock />
     </div>
   );
 }

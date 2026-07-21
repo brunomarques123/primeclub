@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import ConsumidorDock from "@/components/consumidor-dock";
 
 const PLANOS = [
   { id: "basico", nome: "Básico", preco: "R$3,90/mês", detalhe: "Até 4 cupons por mês" },
@@ -32,7 +33,7 @@ export default function AssinaturaPage() {
 
   return (
     <div className="min-h-screen bg-neutral-950 text-neutral-100">
-      <div className="mx-auto max-w-2xl px-6 py-6">
+      <div className="mx-auto max-w-2xl px-6 py-6 pb-28">
         <Link href="/" className="text-sm text-neutral-400 hover:text-amber-300 transition-colors">
           ← Voltar
         </Link>
@@ -65,6 +66,7 @@ export default function AssinaturaPage() {
 
         {erro && <p className="text-red-400 text-sm mt-4">{erro}</p>}
       </div>
+      <ConsumidorDock />
     </div>
   );
 }

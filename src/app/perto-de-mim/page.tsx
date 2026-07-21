@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import ConsumidorDock from "@/components/consumidor-dock";
 
 type OfertaProxima = {
   id: string;
@@ -33,7 +34,7 @@ export default function PertoDeMimPage() {
 
   return (
     <div className="min-h-screen bg-neutral-950 text-neutral-100">
-      <div className="mx-auto max-w-3xl px-6 py-6">
+      <div className="mx-auto max-w-3xl px-6 py-6 pb-28">
         <Link href="/" className="text-sm text-neutral-400 hover:text-amber-300 transition-colors">
           ← Voltar
         </Link>
@@ -67,6 +68,7 @@ export default function PertoDeMimPage() {
           ))}
         </div>
       </div>
+      <ConsumidorDock />
     </div>
   );
 }
