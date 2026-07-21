@@ -18,9 +18,9 @@ export default async function PainelEmpresaPage() {
 
   if (!empresa) {
     return (
-      <main className="mx-auto max-w-2xl p-6">
+      <div className="min-h-screen bg-neutral-950 text-neutral-100 flex items-center justify-center px-6">
         <p>Este login ainda não está vinculado a nenhuma empresa parceira.</p>
-      </main>
+      </div>
     );
   }
 
@@ -31,64 +31,80 @@ export default async function PainelEmpresaPage() {
     .order("criada_em", { ascending: false });
 
   return (
-    <main className="mx-auto max-w-2xl p-6 flex flex-col gap-8">
-      <header className="flex items-center justify-between gap-4 flex-wrap">
-        <div className="flex items-center gap-2">
-          <Image src="/logo.png" alt="PrimeClub" width={36} height={36} className="rounded" />
-          <div>
-            <h1 className="text-xl font-bold">{empresa.nome}</h1>
-            <p className="text-sm text-neutral-500">{empresa.categoria}</p>
+    <div className="min-h-screen bg-neutral-950 text-neutral-100">
+      <div className="mx-auto max-w-2xl px-6 py-6 flex flex-col gap-8">
+        <header className="flex items-center justify-between gap-4 flex-wrap">
+          <div className="flex items-center gap-3">
+            <Image src="/logo.png" alt="PrimeClub" width={40} height={40} className="rounded-lg" />
+            <div>
+              <h1 className="text-xl font-bold">{empresa.nome}</h1>
+              <p className="text-sm text-amber-300 uppercase tracking-wide text-xs">{empresa.categoria}</p>
+            </div>
+          </div>
+          <form action={sair}>
+            <button
+              type="submit"
+              className="text-sm px-3 py-1.5 rounded-full text-neutral-400 hover:bg-red-950 hover:text-red-300 transition-colors"
+            >
+              Sair
+            </button>
+          </form>
+        </header>
+
+        <ValidarCupom />
+
+        <div className="rounded-2xl border border-neutral-800 bg-neutral-900 p-5">
+          <h2 className="font-semibold text-lg mb-3">Nova oferta</h2>
+          <form action={criarOferta} className="flex flex-col gap-3">
+            <input
+              name="descricao"
+              placeholder="Descrição da oferta"
+              required
+              className="border border-neutral-700 bg-neutral-950 text-neutral-100 placeholder-neutral-500 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-amber-400/50"
+            />
+            <input
+              name="percentual"
+              type="number"
+              min={1}
+              max={100}
+              placeholder="% de desconto"
+              required
+              className="border border-neutral-700 bg-neutral-950 text-neutral-100 placeholder-neutral-500 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-amber-400/50"
+            />
+            <button
+              type="submit"
+              className="bg-gradient-to-r from-amber-400 to-yellow-300 text-neutral-950 font-semibold rounded-lg px-4 py-2 w-fit hover:brightness-110 transition"
+            >
+              Enviar para moderação
+            </button>
+          </form>
+        </div>
+
+        <div>
+          <h2 className="font-semibold text-lg mb-3">Minhas ofertas</h2>
+          <div className="grid gap-3">
+            {ofertas?.map((oferta) => (
+              <div
+                key={oferta.id}
+                className="rounded-2xl border border-neutral-800 bg-neutral-900 p-4 flex items-center justify-between"
+              >
+                <div>
+                  <p className="text-sm text-neutral-300">{oferta.descricao}</p>
+                  <p className="text-xs text-neutral-500">
+                    {oferta.percentual_desconto}% OFF — status: {oferta.status}
+                  </p>
+                </div>
+                {oferta.status !== "encerrada" && (
+                  <form action={encerrarOferta}>
+                    <input type="hidden" name="ofertaId" value={oferta.id} />
+                    <button className="text-sm text-red-400 hover:underline">Encerrar</button>
+                  </form>
+                )}
+              </div>
+            ))}
           </div>
         </div>
-        <form action={sair}>
-          <button type="submit" className="text-sm">
-            Sair
-          </button>
-        </form>
-      </header>
-
-      <ValidarCupom />
-
-      <div className="border rounded-lg p-4">
-        <h2 className="font-semibold mb-3">Nova oferta</h2>
-        <form action={criarOferta} className="flex flex-col gap-3">
-          <input name="descricao" placeholder="Descrição da oferta" required className="border rounded px-3 py-2" />
-          <input
-            name="percentual"
-            type="number"
-            min={1}
-            max={100}
-            placeholder="% de desconto"
-            required
-            className="border rounded px-3 py-2"
-          />
-          <button type="submit" className="bg-black text-white rounded px-3 py-2 w-fit">
-            Enviar para moderação
-          </button>
-        </form>
       </div>
-
-      <div>
-        <h2 className="font-semibold mb-3">Minhas ofertas</h2>
-        <div className="grid gap-3">
-          {ofertas?.map((oferta) => (
-            <div key={oferta.id} className="border rounded-lg p-4 flex items-center justify-between">
-              <div>
-                <p className="text-sm">{oferta.descricao}</p>
-                <p className="text-xs text-neutral-500">
-                  {oferta.percentual_desconto}% OFF — status: {oferta.status}
-                </p>
-              </div>
-              {oferta.status !== "encerrada" && (
-                <form action={encerrarOferta}>
-                  <input type="hidden" name="ofertaId" value={oferta.id} />
-                  <button className="text-sm underline">Encerrar</button>
-                </form>
-              )}
-            </div>
-          ))}
-        </div>
-      </div>
-    </main>
+    </div>
   );
 }

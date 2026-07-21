@@ -31,11 +31,11 @@ export default function GerarCupomButton({ ofertaId }: { ofertaId: string }) {
       <button
         onClick={gerar}
         disabled={carregando}
-        className="bg-black text-white rounded px-3 py-2 text-sm disabled:opacity-50"
+        className="bg-gradient-to-r from-amber-400 to-yellow-300 text-neutral-950 font-semibold rounded-lg px-4 py-2 text-sm disabled:opacity-40 hover:brightness-110 transition"
       >
         {carregando ? "Gerando..." : "Gerar cupom"}
       </button>
-      {erro && <p className="text-red-600 text-xs mt-1">{erro}</p>}
+      {erro && <p className="text-red-400 text-xs mt-1">{erro}</p>}
     </div>
   );
 }

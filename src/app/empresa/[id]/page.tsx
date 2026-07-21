@@ -1,5 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import { notFound } from "next/navigation";
+import Link from "next/link";
 import GerarCupomButton from "./gerar-cupom-button";
 import { favoritar, avaliar } from "./actions";
 
@@ -26,46 +27,75 @@ export default async function EmpresaPage({ params }: { params: Promise<{ id: st
     : null;
 
   return (
-    <main className="mx-auto max-w-2xl p-6">
-      <p className="text-xs uppercase text-neutral-500">{empresa.categoria}</p>
-      <h1 className="text-2xl font-bold">{empresa.nome}</h1>
-      <p className="text-sm text-neutral-500">{empresa.endereco}</p>
-      {mediaNota && <p className="text-sm mt-1">⭐ {mediaNota} / 5</p>}
+    <div className="min-h-screen bg-neutral-950 text-neutral-100">
+      <div className="mx-auto max-w-2xl px-6 py-6">
+        <Link href="/" className="text-sm text-neutral-400 hover:text-amber-300 transition-colors">
+          ← Voltar
+        </Link>
 
-      <form action={favoritar} className="mt-2">
-        <input type="hidden" name="empresaId" value={empresa.id} />
-        <button className="text-sm underline">☆ Favoritar</button>
-      </form>
+        <p className="text-xs uppercase tracking-wide text-amber-300 mt-4">{empresa.categoria}</p>
+        <h1 className="text-2xl font-extrabold">{empresa.nome}</h1>
+        <p className="text-sm text-neutral-400">{empresa.endereco}</p>
+        {mediaNota && <p className="text-sm mt-1">⭐ {mediaNota} / 5</p>}
 
-      <h2 className="text-lg font-semibold mt-6 mb-2">Ofertas ativas</h2>
-      <div className="grid gap-4">
-        {ofertas?.length === 0 && <p className="text-neutral-500">Nenhuma oferta ativa no momento.</p>}
-        {ofertas?.map((oferta) => (
-          <div key={oferta.id} className="border rounded-lg p-4 flex items-center justify-between">
-            <div>
-              <p className="text-sm">{oferta.descricao}</p>
-              <p className="text-lg font-bold">{oferta.percentual_desconto}% OFF</p>
+        <form action={favoritar} className="mt-3">
+          <input type="hidden" name="empresaId" value={empresa.id} />
+          <button className="text-sm text-amber-300 hover:underline">☆ Favoritar</button>
+        </form>
+
+        <h2 className="text-lg font-semibold mt-8 mb-3">Ofertas ativas</h2>
+        <div className="grid gap-4">
+          {ofertas?.length === 0 && (
+            <p className="text-neutral-500 border border-dashed border-neutral-800 rounded-2xl p-6 text-center">
+              Nenhuma oferta ativa no momento.
+            </p>
+          )}
+          {ofertas?.map((oferta) => (
+            <div
+              key={oferta.id}
+              className="rounded-2xl border border-neutral-800 bg-neutral-900 p-5 flex items-center justify-between hover:border-amber-400/30 transition-colors"
+            >
+              <div>
+                <p className="text-sm text-neutral-300">{oferta.descricao}</p>
+                <p className="text-2xl font-extrabold mt-1 bg-gradient-to-r from-amber-300 to-yellow-100 bg-clip-text text-transparent">
+                  {oferta.percentual_desconto}% OFF
+                </p>
+              </div>
+              <GerarCupomButton ofertaId={oferta.id} />
             </div>
-            <GerarCupomButton ofertaId={oferta.id} />
-          </div>
-        ))}
-      </div>
-
-      <h2 className="text-lg font-semibold mt-6 mb-2">Avaliar estabelecimento</h2>
-      <form action={avaliar} className="flex flex-col gap-3 border rounded-lg p-4">
-        <input type="hidden" name="empresaId" value={empresa.id} />
-        <select name="nota" required className="border rounded px-3 py-2 w-fit">
-          {[5, 4, 3, 2, 1].map((n) => (
-            <option key={n} value={n}>
-              {n} estrela{n > 1 ? "s" : ""}
-            </option>
           ))}
-        </select>
-        <textarea name="comentario" placeholder="Comentário (opcional)" className="border rounded px-3 py-2" />
-        <button type="submit" className="bg-black text-white rounded px-3 py-2 w-fit">
-          Enviar avaliação
-        </button>
-      </form>
-    </main>
+        </div>
+
+        <h2 className="text-lg font-semibold mt-8 mb-3">Avaliar estabelecimento</h2>
+        <form
+          action={avaliar}
+          className="flex flex-col gap-3 rounded-2xl border border-neutral-800 bg-neutral-900 p-5"
+        >
+          <input type="hidden" name="empresaId" value={empresa.id} />
+          <select
+            name="nota"
+            required
+            className="border border-neutral-700 bg-neutral-950 text-neutral-100 rounded-lg px-3 py-2 w-fit focus:outline-none focus:ring-2 focus:ring-amber-400/50"
+          >
+            {[5, 4, 3, 2, 1].map((n) => (
+              <option key={n} value={n}>
+                {n} estrela{n > 1 ? "s" : ""}
+              </option>
+            ))}
+          </select>
+          <textarea
+            name="comentario"
+            placeholder="Comentário (opcional)"
+            className="border border-neutral-700 bg-neutral-950 text-neutral-100 placeholder-neutral-500 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-amber-400/50"
+          />
+          <button
+            type="submit"
+            className="bg-gradient-to-r from-amber-400 to-yellow-300 text-neutral-950 font-semibold rounded-lg px-4 py-2 w-fit hover:brightness-110 transition"
+          >
+            Enviar avaliação
+          </button>
+        </form>
+      </div>
+    </div>
   );
 }
