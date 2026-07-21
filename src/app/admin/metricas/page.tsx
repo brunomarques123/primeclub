@@ -45,12 +45,18 @@ export default async function MetricasPage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold mb-6">Métricas</h1>
+      <h1 className="text-3xl font-extrabold tracking-tight mb-1">Métricas</h1>
+      <p className="text-neutral-400 mb-8">Indicadores de tração do PrimeClub em tempo real.</p>
       <div className="grid grid-cols-2 gap-4">
         {cards.map((c) => (
-          <div key={c.label} className="border rounded-lg p-4">
-            <p className="text-sm text-neutral-500">{c.label}</p>
-            <p className="text-2xl font-bold">{c.valor}</p>
+          <div
+            key={c.label}
+            className="rounded-2xl border border-neutral-800 bg-neutral-900 p-5 hover:border-amber-400/30 transition-colors"
+          >
+            <p className="text-sm text-neutral-400">{c.label}</p>
+            <p className="text-3xl font-extrabold mt-1 bg-gradient-to-r from-amber-300 to-yellow-100 bg-clip-text text-transparent">
+              {c.valor}
+            </p>
           </div>
         ))}
       </div>
